@@ -141,7 +141,7 @@ services:
       retries: 5
     restart: unless-stopped
 
-  # ========== BGE Embedding Service ==========
+  # ========== BGE Embedding 服务 ==========
   embedding:
     build: ./models
     container_name: ragforce-embedding
@@ -151,10 +151,11 @@ services:
       - ./models:/models:ro
     environment:
       - MODEL_PATH=/models/bge-m3
+      - MODEL_TYPE=embedding
       - SERVICE_PORT=8001
     restart: unless-stopped
 
-  # ========== BGE Reranker Service ==========
+  # ========== BGE Reranker 服务 ==========
   reranker:
     build: ./models
     container_name: ragforce-reranker
@@ -164,6 +165,7 @@ services:
       - ./models:/models:ro
     environment:
       - MODEL_PATH=/models/bge-reranker-v2-m3
+      - MODEL_TYPE=reranker
       - SERVICE_PORT=8002
     restart: unless-stopped
 
