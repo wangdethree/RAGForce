@@ -42,6 +42,9 @@ docker-data/
 .DS_Store
 Thumbs.db
 
+# Uploads
+uploads/
+
 # Logs
 *.log
 logs/

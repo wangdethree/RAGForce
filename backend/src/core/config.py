@@ -59,6 +59,9 @@ class Settings(BaseSettings):
     EMBEDDING_SERVICE_URL: str = "http://embedding:8001"
     RERANKER_SERVICE_URL: str = "http://reranker:8002"
 
+    # 文件存储
+    UPLOAD_DIR: str = "./uploads"
+
     # 检索默认参数
     DEFAULT_TOP_K: int = 5
     DEFAULT_SIMILARITY_THRESHOLD: float = 0.7
