@@ -1,4 +1,4 @@
-"""Celery task for async document processing pipeline."""
+"""Celery 异步文档处理管线任务"""
 
 from celery import Celery
 
@@ -28,7 +28,7 @@ celery_app.conf.update(
 
 @celery_app.task(bind=True, max_retries=3)
 def process_document(self, document_id: str, kb_id: str, file_path: str, file_type: str):
-    """Full document processing pipeline: parse → chunk → embed → index."""
+    """完整文档处理管线：解析 → 切块 → 向量化 → 索引"""
     import asyncio
 
     async def _process():

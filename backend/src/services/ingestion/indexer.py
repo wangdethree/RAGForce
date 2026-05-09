@@ -5,7 +5,7 @@ from src.schemas.ingestion import Chunk
 
 
 class MilvusIndexer:
-    """Index document chunks into Milvus."""
+    """将文档块索引到 Milvus 向量数据库"""
 
     def __init__(self):
         self._connected = False

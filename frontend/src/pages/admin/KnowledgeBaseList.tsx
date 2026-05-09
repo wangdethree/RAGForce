@@ -32,7 +32,7 @@ export default function KnowledgeBaseList() {
       form.resetFields();
       fetchKBs();
     } catch {
-      // validation failed
+      // 表单校验失败
     }
   };
 

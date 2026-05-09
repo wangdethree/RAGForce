@@ -8,11 +8,11 @@ router = APIRouter()
 
 @router.post("", response_model=ChatResponse)
 async def chat(request: ChatRequest):
-    """Send a chat message and get a response with citations."""
+    """发送对话消息，返回包含引用的回复"""
     ...
 
 
 @router.post("/stream")
 async def chat_stream(request: ChatRequest):
-    """Send a chat message and get a streaming response (SSE)."""
+    """发送对话消息，返回 SSE 流式回复"""
     ...

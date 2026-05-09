@@ -4,7 +4,7 @@ from src.schemas.ingestion import Chunk, ParsedDocument
 
 
 class DocumentChunker:
-    """Split documents into overlapping chunks."""
+    """将文档切分为带重叠的文本块"""
 
     def __init__(self, chunk_size: int = 512, chunk_overlap: int = 50):
         self.chunk_size = chunk_size

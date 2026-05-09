@@ -4,7 +4,7 @@ from src.core.config import settings
 
 
 class RerankerService:
-    """Re-rank search results via BGE-Reranker-v2-m3."""
+    """通过 BGE-Reranker-v2-m3 对检索结果重排序"""
 
     async def rerank(
         self,

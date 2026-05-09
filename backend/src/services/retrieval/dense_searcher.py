@@ -4,7 +4,7 @@ from src.core.config import settings
 
 
 class DenseSearcher:
-    """Vector similarity search via Milvus."""
+    """通过 Milvus 进行向量相似度搜索"""
 
     async def search(
         self,

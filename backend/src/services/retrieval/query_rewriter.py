@@ -4,10 +4,10 @@ from src.core.config import settings
 
 
 class QueryRewriter:
-    """Rewrite and expand queries for better retrieval."""
+    """查询改写与扩展，生成多种表述以提升召回率"""
 
     async def rewrite(self, query: str) -> list[str]:
-        """Generate multiple reformulated queries from the original query."""
+        """根据原始查询生成多个改写后的查询表述"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(

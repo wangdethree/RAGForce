@@ -7,5 +7,5 @@ router = APIRouter()
 
 @router.post("", response_model=RetrievalResponse)
 async def retrieve(request: RetrievalRequest):
-    """Retrieve relevant document chunks for a query."""
+    """检索与查询相关的文档分块"""
     ...

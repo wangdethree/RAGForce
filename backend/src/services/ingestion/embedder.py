@@ -4,7 +4,7 @@ from src.core.config import settings
 
 
 class EmbeddingService:
-    """Generate embeddings via BGE-M3 service."""
+    """通过 BGE-M3 服务生成向量嵌入"""
 
     async def embed_batch(self, texts: list[str]) -> list[list[float]]:
         try:

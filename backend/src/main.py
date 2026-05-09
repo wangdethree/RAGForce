@@ -1,4 +1,4 @@
-"""RAGForce - Enterprise RAG Platform"""
+"""RAGForce - 企业级 RAG 平台"""
 
 from contextlib import asynccontextmanager
 

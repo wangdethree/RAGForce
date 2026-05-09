@@ -6,7 +6,7 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Knowledge Base
+// 知识库 API
 export const kbApi = {
   list: () => api.get('/knowledge-bases'),
   get: (id: string) => api.get(`/knowledge-bases/${id}`),
@@ -16,7 +16,7 @@ export const kbApi = {
   delete: (id: string) => api.delete(`/knowledge-bases/${id}`),
 };
 
-// Documents
+// 文档 API
 export const docApi = {
   list: (kbId: string) => api.get(`/documents/kb/${kbId}`),
   get: (id: string) => api.get(`/documents/${id}`),
@@ -31,19 +31,19 @@ export const docApi = {
   delete: (id: string) => api.delete(`/documents/${id}`),
 };
 
-// Retrieval
+// 检索 API
 export const retrievalApi = {
   search: (data: { kb_id: string; query: string; top_k?: number; similarity_threshold?: number; use_hybrid?: boolean; use_rerank?: boolean }) =>
     api.post('/retrieval', data),
 };
 
-// Chat
+// 对话 API
 export const chatApi = {
   send: (data: { kb_id: string; query: string; top_k?: number; history?: Array<{ role: string; content: string }> }) =>
     api.post('/chat', data),
 };
 
-// Audit
+// 审计日志 API
 export const auditApi = {
   list: (params?: { action?: string; resource_type?: string; limit?: number; offset?: number }) =>
     api.get('/audit-logs', { params }),

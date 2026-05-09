@@ -7,7 +7,7 @@ from src.schemas.chat import ChatResponse, Citation
 
 
 class DeepSeekChat:
-    """Chat generation via DeepSeek API."""
+    """通过 DeepSeek API 生成对话回复"""
 
     SYSTEM_PROMPT = """You are RAGForce, an enterprise knowledge base assistant.
 Answer questions based solely on the provided context documents.

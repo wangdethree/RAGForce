@@ -1,5 +1,5 @@
 class RRFusion:
-    """Reciprocal Rank Fusion for combining dense and sparse results."""
+    """倒数排名融合（RRF），合并稠密检索和稀疏检索结果"""
 
     def fuse(
         self,

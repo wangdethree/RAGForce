@@ -7,7 +7,7 @@ from src.schemas.ingestion import ParsedDocument, ImageBlock
 
 
 class DocumentParser:
-    """Parse PDF and Word documents into structured content."""
+    """解析 PDF 和 Word 文档为结构化内容"""
 
     async def parse(self, file_path: str, file_type: str) -> ParsedDocument:
         if file_type == "pdf":

@@ -1,5 +1,5 @@
 class SparseSearcher:
-    """BM25 keyword search via PostgreSQL full-text search."""
+    """通过 PostgreSQL 全文检索实现 BM25 关键词搜索"""
 
     async def search(
         self,

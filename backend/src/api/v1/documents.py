@@ -8,7 +8,7 @@ router = APIRouter()
 
 @router.get("/kb/{kb_id}", response_model=DocumentList)
 async def list_documents(kb_id: str, db: DBSession):
-    """List all documents in a knowledge base."""
+    """获取知识库中的所有文档列表"""
     ...
 
 
@@ -18,17 +18,17 @@ async def upload_document(
     file: UploadFile = File(...),
     db: DBSession = None,
 ):
-    """Upload a document to a knowledge base. Processing happens asynchronously."""
+    """上传文档到知识库，处理过程异步执行"""
     ...
 
 
 @router.get("/{doc_id}", response_model=DocumentResponse)
 async def get_document(doc_id: str, db: DBSession):
-    """Get document details and processing status."""
+    """获取文档详情和处理状态"""
     ...
 
 
 @router.delete("/{doc_id}", status_code=204)
 async def delete_document(doc_id: str, db: DBSession):
-    """Delete a document and its chunks."""
+    """删除文档及其所有分块"""
     ...

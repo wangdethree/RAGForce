@@ -1,4 +1,4 @@
-"""BGE model inference service supporting both embedding and reranking."""
+"""BGE 模型推理服务，同时支持向量嵌入和重排序"""
 
 import os
 

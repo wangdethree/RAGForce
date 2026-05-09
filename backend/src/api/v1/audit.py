@@ -14,5 +14,5 @@ async def list_audit_logs(
     offset: int = Query(0, ge=0),
     db: DBSession = None,
 ):
-    """List audit logs with optional filters."""
+    """获取审计日志列表，支持按操作类型和资源类型筛选"""
     ...

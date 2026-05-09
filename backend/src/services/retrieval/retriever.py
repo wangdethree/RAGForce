@@ -10,7 +10,7 @@ from src.schemas.retrieval import RetrievalResponse, ChunkResult
 
 
 class Retriever:
-    """Orchestrates the Advanced RAG retrieval pipeline."""
+    """编排 Advanced RAG 检索管线"""
 
     async def retrieve(
         self,
@@ -23,7 +23,7 @@ class Retriever:
     ) -> RetrievalResponse:
         start_time = time.time()
 
-        # Stage 1: Query rewriting
+        # 阶段 1：查询改写
         queries = await query_rewriter.rewrite(query)
 
         all_dense_results = []
@@ -38,7 +38,7 @@ class Retriever:
                 sparse_results = await sparse_searcher.search(kb_id, q, top_k)
                 all_sparse_results.extend(sparse_results)
 
-        # Stage 2: Fusion
+        # 阶段 2：结果融合
         if use_hybrid and all_sparse_results:
             candidates = rr_fusion.fuse(all_dense_results, all_sparse_results)
         else:
@@ -49,13 +49,13 @@ class Retriever:
                     seen.add(r["chunk_id"])
                     candidates.append(r)
 
-        # Stage 3: Rerank
+        # 阶段 3：重排序
         if use_rerank:
             candidates = await reranker_service.rerank(query, candidates, top_k)
         else:
             candidates = sorted(candidates, key=lambda x: x["score"], reverse=True)[:top_k]
 
-        # Stage 4: Filter + format
+        # 阶段 4：过滤与格式化
         results = []
         for c in candidates:
             if c["score"] >= similarity_threshold:
