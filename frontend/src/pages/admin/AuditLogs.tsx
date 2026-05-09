@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Table, Select, Card, Tag } from 'antd';
+import { Table, Select, Card, Tag, message } from 'antd';
 import { auditApi } from '../../services/api';
 
 const actionColors: Record<string, string> = {
@@ -19,6 +19,8 @@ export default function AuditLogs() {
     try {
       const res = await auditApi.list({ action: actionFilter, limit: 100 });
       setLogs(res.data.items || []);
+    } catch {
+      message.error('获取审计日志失败');
     } finally {
       setLoading(false);
     }
@@ -28,10 +30,10 @@ export default function AuditLogs() {
 
   return (
     <Card
-      title="Audit Logs"
+      title="审计日志"
       extra={
         <Select
-          placeholder="Filter by action"
+          placeholder="按操作类型筛选"
           style={{ width: 150 }}
           allowClear
           value={actionFilter}
@@ -45,17 +47,17 @@ export default function AuditLogs() {
         rowKey="id"
         loading={loading}
         columns={[
-          { title: 'Time', dataIndex: 'created_at', render: (v: string) => new Date(v).toLocaleString() },
+          { title: '时间', dataIndex: 'created_at', render: (v: string) => new Date(v).toLocaleString() },
           {
-            title: 'Action', dataIndex: 'action', width: 100,
+            title: '操作', dataIndex: 'action', width: 100,
             render: (v: string) => <Tag color={actionColors[v] || 'default'}>{v}</Tag>,
           },
-          { title: 'Resource', dataIndex: 'resource_type', width: 120 },
-          { title: 'Resource ID', dataIndex: 'resource_id', ellipsis: true, width: 200 },
-          { title: 'IP', dataIndex: 'ip_address', width: 140 },
-          { title: 'Duration (ms)', dataIndex: 'duration_ms', width: 120 },
+          { title: '资源类型', dataIndex: 'resource_type', width: 120 },
+          { title: '资源ID', dataIndex: 'resource_id', ellipsis: true, width: 200 },
+          { title: 'IP 地址', dataIndex: 'ip_address', width: 140 },
+          { title: '耗时(ms)', dataIndex: 'duration_ms', width: 100 },
           {
-            title: 'Detail', dataIndex: 'detail',
+            title: '详情', dataIndex: 'detail',
             render: (v: object) => <code style={{ fontSize: 12 }}>{JSON.stringify(v)}</code>,
           },
         ]}

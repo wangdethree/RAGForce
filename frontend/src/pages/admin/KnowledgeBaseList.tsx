@@ -16,6 +16,8 @@ export default function KnowledgeBaseList() {
     try {
       const res = await kbApi.list();
       setKBs(res.data.items || []);
+    } catch {
+      message.error('获取知识库列表失败');
     } finally {
       setLoading(false);
     }
@@ -27,7 +29,7 @@ export default function KnowledgeBaseList() {
     try {
       const values = await form.validateFields();
       await kbApi.create(values);
-      message.success('Knowledge base created');
+      message.success('知识库创建成功');
       setModalOpen(false);
       form.resetFields();
       fetchKBs();
@@ -38,16 +40,16 @@ export default function KnowledgeBaseList() {
 
   const handleDelete = async (id: string) => {
     await kbApi.delete(id);
-    message.success('Knowledge base deleted');
+    message.success('知识库已删除');
     fetchKBs();
   };
 
   return (
     <div>
       <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
-        <h2>Knowledge Bases</h2>
+        <h2>知识库管理</h2>
         <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalOpen(true)}>
-          Create KB
+          创建知识库
         </Button>
       </div>
 
@@ -60,20 +62,20 @@ export default function KnowledgeBaseList() {
           style: { cursor: 'pointer' },
         })}
         columns={[
-          { title: 'Name', dataIndex: 'name' },
-          { title: 'Description', dataIndex: 'description', ellipsis: true },
-          { title: 'Documents', dataIndex: 'document_count' },
+          { title: '名称', dataIndex: 'name' },
+          { title: '描述', dataIndex: 'description', ellipsis: true },
+          { title: '文档数', dataIndex: 'document_count' },
           { title: 'Top K', dataIndex: 'top_k', width: 80 },
-          { title: 'Similarity', dataIndex: 'similarity_threshold', width: 100 },
+          { title: '相似度阈值', dataIndex: 'similarity_threshold', width: 100 },
           {
-            title: 'Created',
+            title: '创建时间',
             dataIndex: 'created_at',
             render: (v: string) => new Date(v).toLocaleDateString(),
           },
           {
-            title: 'Actions',
+            title: '操作',
             render: (_: unknown, record: { id: string }) => (
-              <Popconfirm title="Delete this KB and all documents?" onConfirm={(e) => { e?.stopPropagation(); handleDelete(record.id); }} onCancel={(e) => e?.stopPropagation()}>
+              <Popconfirm title="确定删除该知识库及其所有文档？" onConfirm={(e) => { e?.stopPropagation(); handleDelete(record.id); }} onCancel={(e) => e?.stopPropagation()}>
                 <Button type="text" danger icon={<DeleteOutlined />} onClick={(e) => e.stopPropagation()} />
               </Popconfirm>
             ),
@@ -82,23 +84,25 @@ export default function KnowledgeBaseList() {
       />
 
       <Modal
-        title="Create Knowledge Base"
+        title="创建知识库"
         open={modalOpen}
         onOk={handleCreate}
         onCancel={() => { setModalOpen(false); form.resetFields(); }}
+        okText="创建"
+        cancelText="取消"
       >
         <Form form={form} layout="vertical">
-          <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Name is required' }]}>
-            <Input placeholder="e.g. Technical Docs" />
+          <Form.Item name="name" label="名称" rules={[{ required: true, message: '请输入知识库名称' }]}>
+            <Input placeholder="例如：技术文档库" />
           </Form.Item>
-          <Form.Item name="description" label="Description">
-            <Input.TextArea rows={3} placeholder="Brief description of this knowledge base" />
+          <Form.Item name="description" label="描述">
+            <Input.TextArea rows={3} placeholder="简要描述该知识库的内容" />
           </Form.Item>
           <Space size="large">
             <Form.Item name="top_k" label="Top K" initialValue={5}>
               <InputNumber min={1} max={100} />
             </Form.Item>
-            <Form.Item name="similarity_threshold" label="Similarity Threshold" initialValue={0.7}>
+            <Form.Item name="similarity_threshold" label="相似度阈值" initialValue={0.7}>
               <InputNumber min={0} max={1} step={0.05} />
             </Form.Item>
           </Space>

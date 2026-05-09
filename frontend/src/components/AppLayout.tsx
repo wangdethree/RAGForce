@@ -12,11 +12,11 @@ import {
 const { Header, Sider, Content } = Layout;
 
 const menuItems = [
-  { key: '/dashboard', icon: <DashboardOutlined />, label: 'Dashboard' },
-  { key: '/knowledge-bases', icon: <DatabaseOutlined />, label: 'Knowledge Bases' },
-  { key: '/chat', icon: <MessageOutlined />, label: 'Chat' },
-  { key: '/audit-logs', icon: <AuditOutlined />, label: 'Audit Logs' },
-  { key: '/settings', icon: <SettingOutlined />, label: 'Settings' },
+  { key: '/dashboard', icon: <DashboardOutlined />, label: '仪表盘' },
+  { key: '/knowledge-bases', icon: <DatabaseOutlined />, label: '知识库' },
+  { key: '/chat', icon: <MessageOutlined />, label: '对话' },
+  { key: '/audit-logs', icon: <AuditOutlined />, label: '审计日志' },
+  { key: '/settings', icon: <SettingOutlined />, label: '系统设置' },
 ];
 
 export default function AppLayout() {
