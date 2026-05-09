@@ -1,0 +1,13 @@
+**/__pycache__
+**/*.pyc
+**/.venv
+**/venv
+**/node_modules
+**/.git
+**/.claude
+**/.idea
+**/.vscode
+**/*.md
+**/docker-data
+**/.env*
+.env

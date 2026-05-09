@@ -1,0 +1,229 @@
+version: "3.8"
+
+services:
+  # ========== Backend API ==========
+  backend:
+    build: ./backend
+    container_name: ragforce-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      milvus:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src
+      - ./models:/app/models:ro
+    restart: unless-stopped
+
+  # ========== Frontend ==========
+  frontend:
+    build: ./frontend
+    container_name: ragforce-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # ========== PostgreSQL ==========
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: ragforce-postgres
+    environment:
+      POSTGRES_USER: ragforce
+      POSTGRES_PASSWORD: ragforce_secret
+      POSTGRES_DB: ragforce
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ragforce"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ========== Redis ==========
+  redis:
+    image: redis:7-alpine
+    container_name: ragforce-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ========== Milvus ==========
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.5
+    container_name: ragforce-etcd
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - etcd_data:/etcd
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: ragforce-minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/minio_data
+    command: minio server /minio_data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    restart: unless-stopped
+
+  milvus:
+    image: milvusdb/milvus:v2.4.0
+    container_name: ragforce-milvus
+    command: ["milvus", "run", "standalone"]
+    environment:
+      ETCD_ENDPOINTS: etcd:2379
+      MINIO_ADDRESS: minio:9000
+      MINIO_ACCESS_KEY_ID: minioadmin
+      MINIO_SECRET_ACCESS_KEY: minioadmin
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    volumes:
+      - milvus_data:/var/lib/milvus
+    depends_on:
+      - etcd
+      - minio
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    restart: unless-stopped
+
+  # ========== RabbitMQ ==========
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: ragforce-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ragforce
+      RABBITMQ_DEFAULT_PASS: ragforce_secret
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ========== BGE Embedding Service ==========
+  embedding:
+    build: ./models
+    container_name: ragforce-embedding
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./models:/models:ro
+    environment:
+      - MODEL_PATH=/models/bge-m3
+      - SERVICE_PORT=8001
+    restart: unless-stopped
+
+  # ========== BGE Reranker Service ==========
+  reranker:
+    build: ./models
+    container_name: ragforce-reranker
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./models:/models:ro
+    environment:
+      - MODEL_PATH=/models/bge-reranker-v2-m3
+      - SERVICE_PORT=8002
+    restart: unless-stopped
+
+  # ========== Observability ==========
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: ragforce-jaeger
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ragforce-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ragforce-grafana
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+
+  elasticsearch:
+    image: elasticsearch:8.12.0
+    container_name: ragforce-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    restart: unless-stopped
+
+  kibana:
+    image: kibana:8.12.0
+    container_name: ragforce-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  etcd_data:
+  minio_data:
+  milvus_data:
+  rabbitmq_data:
+  prometheus_data:
+  grafana_data:
+  es_data:

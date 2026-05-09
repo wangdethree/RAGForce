@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "ragforce-backend"
+    static_configs:
+      - targets: ["backend:8000"]
+    metrics_path: "/metrics"
+
+  - job_name: "ragforce-embedding"
+    static_configs:
+      - targets: ["embedding:8001"]
+
+  - job_name: "ragforce-reranker"
+    static_configs:
+      - targets: ["reranker:8002"]
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
