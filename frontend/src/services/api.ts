@@ -6,6 +6,12 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// 仪表盘 API
+export const dashboardApi = {
+  stats: () => api.get('/dashboard/stats'),
+  recentKBs: () => api.get('/dashboard/recent-kbs'),
+};
+
 // 知识库 API
 export const kbApi = {
   list: () => api.get('/knowledge-bases'),
