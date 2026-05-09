@@ -9,7 +9,8 @@ from src.api.v1.router import api_router
 from src.core.config import settings
 from src.core.exceptions import register_exception_handlers
 from src.middleware.audit import AuditMiddleware
-from src.middleware.metrics import MetricsMiddleware
+from src.middleware.metrics import MetricsMiddleware, metrics_endpoint
+from src.models import KnowledgeBase, Document, DocumentChunk, AuditLog  # noqa: F401 注册所有模型
 
 
 @asynccontextmanager
@@ -43,3 +44,8 @@ app.include_router(api_router, prefix="/api/v1")
 @app.get("/health")
 async def health_check():
     return {"status": "ok", "service": settings.APP_NAME, "version": settings.APP_VERSION}
+
+
+@app.get("/metrics")
+async def metrics():
+    return await metrics_endpoint()
