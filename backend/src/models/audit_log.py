@@ -1,7 +1,7 @@
 from sqlalchemy import JSON, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.models.base import Base, TimestampMixin, gen_uuid
+from models.base import Base, TimestampMixin, gen_uuid
 
 
 class AuditLog(Base, TimestampMixin):

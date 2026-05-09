@@ -1,8 +1,8 @@
 import asyncio
 import logging
 
-from src.core.database import async_session_factory
-from src.models.audit_log import AuditLog
+from core.database import async_session_factory
+from models.audit_log import AuditLog
 
 logger = logging.getLogger(__name__)
 

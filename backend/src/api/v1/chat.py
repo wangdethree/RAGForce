@@ -3,9 +3,9 @@ import json
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 
-from src.schemas.chat import ChatRequest, ChatResponse
-from src.services.retrieval.retriever import retriever
-from src.services.generation.deepseek_chat import deepseek_chat
+from schemas.chat import ChatRequest, ChatResponse
+from services.retrieval.retriever import retriever
+from services.generation.deepseek_chat import deepseek_chat
 
 router = APIRouter()
 

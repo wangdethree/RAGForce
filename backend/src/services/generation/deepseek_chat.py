@@ -2,8 +2,8 @@ import time
 
 import httpx
 
-from src.core.config import settings
-from src.schemas.chat import ChatResponse, Citation
+from core.config import settings
+from schemas.chat import ChatResponse, Citation
 
 
 class DeepSeekChat:

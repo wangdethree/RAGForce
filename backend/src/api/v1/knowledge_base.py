@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 from sqlalchemy import select, func, delete
 
-from src.api.deps import DBSession
-from src.core.exceptions import NotFoundError
-from src.models.knowledge_base import KnowledgeBase
-from src.schemas.knowledge_base import (
+from api.deps import DBSession
+from core.exceptions import NotFoundError
+from models.knowledge_base import KnowledgeBase
+from schemas.knowledge_base import (
     KnowledgeBaseCreate,
     KnowledgeBaseResponse,
     KnowledgeBaseList,

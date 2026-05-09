@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from src.api.v1 import knowledge_base, documents, retrieval, chat, audit, dashboard
+from api.v1 import knowledge_base, documents, retrieval, chat, audit, dashboard
 
 api_router = APIRouter()
 

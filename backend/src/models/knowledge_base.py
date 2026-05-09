@@ -1,7 +1,7 @@
 from sqlalchemy import String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.models.base import Base, TimestampMixin, gen_uuid
+from models.base import Base, TimestampMixin, gen_uuid
 
 
 class KnowledgeBase(Base, TimestampMixin):

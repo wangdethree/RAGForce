@@ -5,13 +5,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api.v1.router import api_router
-from src.core.config import settings
-from src.core.exceptions import register_exception_handlers
-from src.core.logging import setup_logging
-from src.middleware.audit import AuditMiddleware
-from src.middleware.metrics import MetricsMiddleware, metrics_endpoint
-from src.models import KnowledgeBase, Document, DocumentChunk, AuditLog  # noqa: F401 注册所有模型
+from api.v1.router import api_router
+from core.config import settings
+from core.exceptions import register_exception_handlers
+from core.logging import setup_logging
+from middleware.audit import AuditMiddleware
+from middleware.metrics import MetricsMiddleware, metrics_endpoint
+from models import KnowledgeBase, Document, DocumentChunk, AuditLog  # noqa: F401 注册所有模型
 
 setup_logging()
 

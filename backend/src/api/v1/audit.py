@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Query
 from sqlalchemy import select, func
 
-from src.api.deps import DBSession
-from src.models.audit_log import AuditLog
-from src.schemas.audit import AuditLogList, AuditLogResponse
+from api.deps import DBSession
+from models.audit_log import AuditLog
+from schemas.audit import AuditLogList, AuditLogResponse
 
 router = APIRouter()
 

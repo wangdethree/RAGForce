@@ -12,7 +12,7 @@ class AuditLogResponse(BaseModel):
     ip_address: str
     duration_ms: int
     created_at: datetime
-
+    
     model_config = {"from_attributes": True}
 
 

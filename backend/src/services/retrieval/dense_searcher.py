@@ -1,6 +1,6 @@
 from pymilvus import Collection, connections, utility
 
-from src.core.config import settings
+from core.config import settings
 
 
 class DenseSearcher:

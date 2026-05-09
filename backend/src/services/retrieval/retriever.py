@@ -1,12 +1,12 @@
 import time
 
-from src.services.retrieval.dense_searcher import dense_searcher
-from src.services.retrieval.sparse_searcher import sparse_searcher
-from src.services.retrieval.reranker import reranker_service
-from src.services.retrieval.fusion import rr_fusion
-from src.services.retrieval.query_rewriter import query_rewriter
-from src.services.ingestion.embedder import embedding_service
-from src.schemas.retrieval import RetrievalResponse, ChunkResult
+from services.retrieval.dense_searcher import dense_searcher
+from services.retrieval.sparse_searcher import sparse_searcher
+from services.retrieval.reranker import reranker_service
+from services.retrieval.fusion import rr_fusion
+from services.retrieval.query_rewriter import query_rewriter
+from services.ingestion.embedder import embedding_service
+from schemas.retrieval import RetrievalResponse, ChunkResult
 
 
 class Retriever:

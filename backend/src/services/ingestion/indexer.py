@@ -1,7 +1,7 @@
 from pymilvus import Collection, connections, utility
 
-from src.core.config import settings
-from src.schemas.ingestion import Chunk
+from core.config import settings
+from schemas.ingestion import Chunk
 
 
 class MilvusIndexer:

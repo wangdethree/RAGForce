@@ -3,7 +3,7 @@ import time
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from src.services.audit_service import audit_service
+from services.audit_service import audit_service
 
 
 class AuditMiddleware(BaseHTTPMiddleware):

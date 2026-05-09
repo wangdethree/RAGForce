@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from sqlalchemy import select, func
 
-from src.api.deps import DBSession
-from src.models.knowledge_base import KnowledgeBase
-from src.models.document import Document, DocumentChunk
-from src.models.audit_log import AuditLog
-from src.schemas.dashboard import DashboardStats, RecentKB
+from api.deps import DBSession
+from models.knowledge_base import KnowledgeBase
+from models.document import Document, DocumentChunk
+from models.audit_log import AuditLog
+from schemas.dashboard import DashboardStats, RecentKB
 
 router = APIRouter()
 

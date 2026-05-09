@@ -1,6 +1,6 @@
 import re
 
-from src.schemas.ingestion import Chunk, ParsedDocument
+from schemas.ingestion import Chunk, ParsedDocument
 
 
 class DocumentChunker:

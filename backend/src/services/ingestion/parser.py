@@ -3,7 +3,7 @@ from pathlib import Path
 import fitz  # PyMuPDF
 from docx import Document as DocxDocument
 
-from src.schemas.ingestion import ParsedDocument, ImageBlock
+from schemas.ingestion import ParsedDocument, ImageBlock
 
 
 class DocumentParser:

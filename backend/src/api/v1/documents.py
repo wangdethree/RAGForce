@@ -5,11 +5,11 @@ from pathlib import Path
 from fastapi import APIRouter, UploadFile, File, Form
 from sqlalchemy import select
 
-from src.api.deps import DBSession
-from src.core.config import settings
-from src.core.exceptions import NotFoundError, InvalidOperationError
-from src.models.document import Document, DocumentStatus
-from src.schemas.document import DocumentResponse, DocumentList
+from api.deps import DBSession
+from core.config import settings
+from core.exceptions import NotFoundError, InvalidOperationError
+from models.document import Document, DocumentStatus
+from schemas.document import DocumentResponse, DocumentList
 
 ALLOWED_EXTENSIONS = {".pdf", ".docx", ".doc"}
 
@@ -67,7 +67,7 @@ async def upload_document(
 
     # 触发异步处理（Celery 不可用时跳过）
     try:
-        from src.worker.doc_processing import process_document
+        from worker.doc_processing import process_document
         process_document.delay(doc.id, kb_id, str(storage_path), ext.lstrip("."))
     except Exception:
         pass

@@ -2,11 +2,11 @@
 
 from celery import Celery
 
-from src.core.config import settings
-from src.services.ingestion.parser import document_parser
-from src.services.ingestion.chunker import chunker
-from src.services.ingestion.embedder import embedding_service
-from src.services.ingestion.indexer import milvus_indexer
+from core.config import settings
+from services.ingestion.parser import document_parser
+from services.ingestion.chunker import chunker
+from services.ingestion.embedder import embedding_service
+from services.ingestion.indexer import milvus_indexer
 
 celery_app = Celery(
     "ragforce",

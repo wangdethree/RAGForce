@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from src.schemas.retrieval import RetrievalRequest, RetrievalResponse
-from src.services.retrieval.retriever import retriever
+from schemas.retrieval import RetrievalRequest, RetrievalResponse
+from services.retrieval.retriever import retriever
 
 router = APIRouter()
 
