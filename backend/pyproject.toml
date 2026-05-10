@@ -30,11 +30,79 @@ dependencies = [
     "python-json-logger>=2.0.0",
 ]
 
+# ------------------------------------------------------------------
+# 可选依赖：仅用于开发、测试与评测。
+# 约束（Requirement 19.6）：测试专用库不得进入 [project].dependencies，
+# 所有测试/评测相关依赖统一收敛到下方 dev 额外组中。
+# ------------------------------------------------------------------
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.0.0",
-    "pytest-asyncio>=0.23.0",
-    "httpx>=0.26.0",
-    "ruff>=0.1.0",
-    "mypy>=1.8.0",
+    # —— 测试运行时 ——
+    "pytest>=8.0.0",            # 测试运行器
+    "pytest-asyncio>=0.23.0",   # async 测试支持（asyncio_mode=auto）
+    "pytest-cov>=4.1.0",        # 覆盖率插件（--cov-fail-under=60）
+    "hypothesis>=6.98.0",       # 属性测试框架（PBT）
+    # —— 进程内 API 驱动与内存数据库 ——
+    "httpx>=0.26.0",            # ASGITransport + AsyncClient 驱动 FastAPI
+    "aiosqlite>=0.19.0",        # 内存 SQLite 的 async 驱动
+    # —— 评测与 fixture 生成 ——
+    "reportlab>=4.0.0",         # 运行时生成样例 PDF，避免提交二进制
+    "respx>=0.20.0",            # 可选：在 service 层为 httpx mock 传输
+    # —— 代码质量工具 ——
+    "ruff>=0.1.0",              # Lint + 格式化
+    "mypy>=1.8.0",              # 静态类型检查
+]
+
+# ------------------------------------------------------------------
+# pytest 配置
+# - asyncio_mode=auto：所有 async 用例自动识别，无需手动 @pytest.mark.asyncio
+# - testpaths / pythonpath：以 backend/ 为工作目录时，测试位于 tests/，被测代码位于 src/
+# - --strict-markers / --strict-config：未注册的 marker / 未知配置项即启动失败
+# - --cov-fail-under=60：覆盖率门槛（Requirement 1.6、9.7）
+# ------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.0"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+    "--cov-fail-under=60",
+]
+# 分层 marker（Requirement 10.1–10.6）：
+# 按目录一致性使用，默认 CI 调用：pytest -m "not docker and not slow"
+markers = [
+    "unit: 纯逻辑测试，无 I/O",
+    "integration: 带 Fakes 的管线测试，无网络/Docker",
+    "api: FastAPI 契约测试",
+    "property: Hypothesis 属性测试",
+    "slow: 默认跳过，通过 -m slow 显式开启",
+    "docker: 需要 docker-compose 栈（默认跳过），通过 -m docker 显式开启",
+]
+
+# ------------------------------------------------------------------
+# coverage 配置
+# - branch=true：启用分支覆盖
+# - source：只统计业务层（services、api），忽略 worker 与入口模块
+# - omit：异步 worker 与 main 入口由集成栈测试覆盖，不纳入行级统计
+# ------------------------------------------------------------------
+[tool.coverage.run]
+branch = true
+source = ["src/services", "src/api"]
+omit = [
+    "src/worker/*",
+    "src/main.py",
+]
+
+[tool.coverage.report]
+# 忽略显然无需覆盖的行（防御性代码、类型守卫、未实现分支）
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
 ]

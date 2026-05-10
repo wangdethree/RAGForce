@@ -25,7 +25,9 @@ frontend/.vite/
 # Claude
 .claude/
 
-# Models
+# Models — 排除所有本地下载的 HuggingFace 权重目录，但保留 Dockerfile / serve.py / 测试夹具
+models/bge-m3/
+models/bge-reranker-v2-m3/
 models/*.onnx
 models/*.bin
 models/*.safetensors
@@ -54,3 +56,14 @@ htmlcov/
 .coverage
 .coverage.*
 coverage.xml
+
+# Eval reports (generated at runtime; keep directory but not outputs)
+backend/eval/reports/*.md
+
+# 临时脚本与验证产物（开发期诊断用，不入库）
+_check_*.ps1
+_verify_*.py
+_verify_*.ps1
+_probe_*.ps1
+backend/tmp_*.txt
+backend/_verify_*.py
