@@ -9,6 +9,15 @@ services:
       - "8000:8000"
     env_file:
       - .env
+    # 容器网络内用 compose 服务名覆盖 .env 里的 localhost，
+    # 这样开发机直接跑（连 localhost 端口）与容器内跑（连服务名）都能复用同一份 .env。
+    environment:
+      POSTGRES_HOST: postgres
+      REDIS_URL: redis://redis:6379/0
+      MILVUS_HOST: milvus
+      RABBITMQ_URL: amqp://ragforce:ragforce_secret@rabbitmq:5672/
+      MINIO_ENDPOINT: minio:9000
+      PYTHONPATH: /app:/app/src
     depends_on:
       postgres:
         condition: service_healthy
